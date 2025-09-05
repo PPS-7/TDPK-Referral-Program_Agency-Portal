@@ -2,252 +2,138 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Visa Referral Agency Portal</title>
+  <title>TDPK International Services – Referral Agency Portal</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
+      background: linear-gradient(135deg, #f0f4f8, #d9e4f5);
       font-family: 'Inter', sans-serif;
-      background-color: #1a202c;
-      color: #f3f4f6;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
     }
-    #login-screen, #dashboard-screen {
-      background-color: #ffffff;
-      border-radius: 0.75rem;
-      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
-      padding: 2.5rem;
-      width: 100%;
-      max-width: 28rem;
+    .btn-primary {
+      background-color: #2563eb;
+      color: white;
     }
-    #dashboard-screen { max-width: 64rem; }
-    input {
-      border-radius: 0.5rem;
-      border: 1px solid #d1d5db;
-      padding: 0.75rem;
-      background-color: #ffffff;
-      font-size: 0.875rem;
-      color: #000 !important;
+    .btn-primary:hover {
+      background-color: #1d4ed8;
     }
-    input::placeholder { color: #a0aec0 !important; font-size: 0.875rem; }
-    input:focus {
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59,130,246,0.5);
-      outline: none;
-    }
-    button { border-radius: 0.5rem; transition: 0.2s; }
-    button:hover { transform: translateY(-2px); }
-    .btn-primary { background-color: #3b82f6; color: #fff; }
-    .btn-primary:hover { background-color: #2563eb; }
-    .btn-logout { background-color: #ef4444; color: #fff; }
-    .btn-logout:hover { background-color: #dc2626; }
-    th, td { background-color: #fff; }
   </style>
 </head>
-<body>
+<body class="min-h-screen flex items-center justify-center">
 
-  <!-- Login form -->
-<div id="loginSection" class="max-w-md mx-auto mt-10 bg-white p-6 rounded shadow">
-  <h2 class="text-xl font-bold mb-4">Agency Login</h2>
+  <!-- Login Screen -->
+  <div id="login-screen" class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg">
+    <img src="https://placehold.co/400x150/52d242/ffffff?text=TDPK+International+Services" 
+         alt="TDPK International Services" 
+         class="mx-auto mb-6 rounded-xl shadow-md">
 
-  <!-- Force equal width for inputs + button -->
-  <div class="flex flex-col items-stretch space-y-4">
-    <input 
-      type="text" 
-      id="agencyName" 
-      placeholder="Agency Name" 
-      class="p-2 border rounded w-full"
-    />
-    <input 
-      type="password" 
-      id="password" 
-      placeholder="Password" 
-      class="p-2 border rounded w-full"
-    />
-    <button 
-      id="loginButton" 
-      class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 disabled:bg-gray-400 w-full"
-    >
-      Login
-    </button>
-    <p id="errorMessage" class="text-red-500 text-sm"></p>
+    <h1 class="text-2xl font-bold mb-6 text-center text-gray-900">Referral Agency Portal</h1>
+
+    <form id="login-form" class="space-y-6">
+      <div class="space-y-4 w-full">
+        <div>
+          <label for="agency-name" class="block text-sm font-medium text-gray-700">Agency Name</label>
+          <input type="text" id="agency-name" placeholder="Enter your agency name" required
+            class="mt-1 w-full rounded-md border border-gray-300 p-3 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+        </div>
+
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+          <input type="password" id="password" placeholder="Enter your password" required
+            class="mt-1 w-full rounded-md border border-gray-300 p-3 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+        </div>
+
+        <button type="submit" id="login-button" disabled
+          class="w-full py-3 px-4 rounded-md shadow-sm text-sm font-medium btn-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400">
+          Loading...
+        </button>
+
+        <div id="error-message" class="text-red-500 text-sm text-center"></div>
+      </div>
+    </form>
   </div>
-</div>
 
-  <!-- DASHBOARD -->
-  <div id="dashboard-screen" class="hidden max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
-    <div class="flex justify-between items-center mb-6">
-      <h1 class="text-3xl font-bold text-gray-900">Welcome, <span id="welcome-agency-name"></span></h1>
-      <button id="logout-button" class="btn-logout py-2 px-4 text-sm font-medium">Log Out</button>
-    </div>
-    
-    <div class="bg-blue-50 border-l-4 border-blue-400 text-blue-800 p-4 rounded-lg mb-6">
-      <p>Your total estimated revenue share for leads with status <b>Signed Up</b>: 
-         <span id="total-revenue" class="font-bold"></span> THB</p>
-    </div>
-    
-    <div id="leads-list">
-      <h2 class="text-2xl font-semibold mb-4 text-gray-900">Your Referred Leads Status</h2>
-      <div id="leads-table-container" class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200 rounded-lg">
-          <thead class="bg-gray-50">
-            <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Candidate</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Visa Type</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Visa Status</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Payment</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Revenue Share</th>
-            </tr>
-          </thead>
-          <tbody id="leads-table-body" class="bg-white divide-y divide-gray-200"></tbody>
-        </table>
-      </div>
-      <div id="no-leads" class="hidden text-center text-gray-500 mt-4 p-4 border rounded-md">
-        No referrals found for this agency.
-      </div>
-    </div>
+  <!-- Dashboard -->
+  <div id="dashboard" class="hidden max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+    <h2 class="text-2xl font-bold mb-6 text-gray-900">Welcome, <span id="agency-display"></span></h2>
+    <div id="sheet-links" class="space-y-4"></div>
+    <button id="logout-button" class="mt-6 px-4 py-2 rounded-md bg-gray-700 text-white hover:bg-gray-900">Logout</button>
   </div>
 
   <script>
-    // --- CONFIG ---
-    const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSve5MYbZ7TUkDNHpYyWIHoi8mF32dFuEMmm2DCZTTd0o2gsWFRBG66ju9YKczVSrF1AxygZqvWwJ6K/pub?gid=1741255249&single=true&output=csv';
-    const sheetUrl_auth = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTfAgz53smE06zD57K1XB79aHtLn5UVSvTd0I_RQCnfl-HaEll4cJfaPYwhGGNqrxOrUdRrQ_TMrl-E/pub?gid=2106440009&single=true&output=csv';
-    const revenueSharePercentage = 0.10;
-    const revenuePerClient = 50000;
+    const LOGIN_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTfAgz53smE06zD57K1XB79aHtLn5UVSvTd0I_RQCnfl-HaEll4cJfaPYwhGGNqrxOrUdRrQ_TMrl-E/pub?gid=2106440009&single=true&output=csv";
+    const REFERRAL_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSve5MYbZ7TUkDNHpYyWIHoi8mF32dFuEMmm2DCZTTd0o2gsWFRBG66ju9YKczVSrF1AxygZqvWwJ6K/pub?gid=1741255249&single=true&output=csv";
 
-    let authData = {};
+    const loginForm = document.getElementById("login-form");
+    const loginButton = document.getElementById("login-button");
+    const errorMessage = document.getElementById("error-message");
+    const loginScreen = document.getElementById("login-screen");
+    const dashboard = document.getElementById("dashboard");
+    const agencyDisplay = document.getElementById("agency-display");
+    const sheetLinks = document.getElementById("sheet-links");
+    const logoutButton = document.getElementById("logout-button");
 
-    const loginForm = document.getElementById('login-form');
-    const loginScreen = document.getElementById('login-screen');
-    const dashboardScreen = document.getElementById('dashboard-screen');
-    const welcomeAgencyName = document.getElementById('welcome-agency-name');
-    const totalRevenueSpan = document.getElementById('total-revenue');
-    const leadsTableBody = document.getElementById('leads-table-body');
-    const logoutButton = document.getElementById('logout-button');
-    const errorMessage = document.getElementById('error-message');
-    const noLeadsMessage = document.getElementById('no-leads');
-    const loginButton = document.getElementById('login-button');
+    window.addEventListener("load", () => {
+      loginButton.disabled = false;
+      loginButton.textContent = "Login";
+    });
 
-    // CSV parser
-    function parseCSV(text) {
-      const rows = [];
-      let row = [], cell = '', inQuote = false;
-      for (let i=0; i<text.length; i++) {
-        const char = text[i], nextChar = text[i+1];
-        if (char === '"') {
-          if (inQuote && nextChar === '"') { cell += '"'; i++; }
-          else { inQuote = !inQuote; }
-        } else if (char === ',' && !inQuote) { row.push(cell); cell = ''; }
-        else if (char === '\n' && !inQuote) { row.push(cell); rows.push(row); row=[]; cell=''; }
-        else { cell += char; }
-      }
-      if (cell) row.push(cell);
-      if (row.length) rows.push(row);
-      return rows.map(r => r.map(c => c.trim()));
+    async function fetchCSV(url) {
+      const res = await fetch(url);
+      const text = await res.text();
+      return text.split("\n").slice(1).map(row => row.split(",").map(c => c.trim()));
     }
 
-    async function fetchAuthData() {
-      try {
-        loginButton.disabled = true;
-        loginButton.textContent = 'Loading...';
-        const res = await fetch(sheetUrl_auth);
-        const csv = await res.text();
-        const rows = parseCSV(csv);
-        const headers = rows[0];
-        const idxAgency = headers.indexOf('Agency Name');
-        const idxPass = headers.indexOf('Password');
-        rows.slice(1).forEach(r => {
-          if (r[idxAgency] && r[idxPass]) {
-            authData[r[idxAgency].toLowerCase()] = r[idxPass];
-          }
-        });
-      } catch {
-        errorMessage.textContent = "Could not load login data.";
-      } finally {
-        loginButton.disabled = false;
-        loginButton.textContent = 'Login';
-      }
-    }
-
-    loginForm.addEventListener('submit', e => {
+    loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const agency = document.getElementById('agency-name').value.trim().toLowerCase();
-      const pass = document.getElementById('password').value.trim();
-      if (authData[agency] && authData[agency] === pass) {
-        localStorage.setItem('loggedInAgency', agency);
-        fetchData(agency);
-      } else {
-        errorMessage.textContent = "Invalid agency name or password.";
-      }
-    });
+      errorMessage.textContent = "";
+      loginButton.disabled = true;
+      loginButton.textContent = "Checking...";
 
-    logoutButton.addEventListener('click', () => {
-      localStorage.removeItem('loggedInAgency');
-      dashboardScreen.classList.add('hidden');
-      loginScreen.classList.remove('hidden');
-      leadsTableBody.innerHTML = '';
-      totalRevenueSpan.textContent = '';
-      errorMessage.textContent = '';
-    });
-
-    async function fetchData(agency) {
-      loginScreen.classList.add('hidden');
-      dashboardScreen.classList.remove('hidden');
-      welcomeAgencyName.textContent = agency;
-      leadsTableBody.innerHTML = '';
-      noLeadsMessage.classList.add('hidden');
-      errorMessage.textContent = '';
+      const agencyName = document.getElementById("agency-name").value.trim();
+      const password = document.getElementById("password").value.trim();
 
       try {
-        const res = await fetch(sheetUrl);
-        const csv = await res.text();
-        const rows = parseCSV(csv);
-        const headers = rows[0];
-        const idxAgency = headers.indexOf('Agency Name');
-        const idxCandidate = headers.indexOf('Candidate Name');
-        const idxVisaType = headers.indexOf('Visa Type');
-        const idxVisaStatus = headers.indexOf('Visa Status');
-        const idxPay = headers.indexOf('Payment Status');
+        // Fetch login sheet
+        const creds = await fetchCSV(LOGIN_CSV);
+        const match = creds.find(row => row[0] === agencyName && row[1] === password);
 
-        const leads = rows.slice(1).filter(r => r[idxAgency]?.toLowerCase() === agency);
-        let totalRevenue = 0;
+        if (match) {
+          // Show dashboard
+          loginScreen.classList.add("hidden");
+          dashboard.classList.remove("hidden");
+          agencyDisplay.textContent = agencyName;
 
-        if (leads.length) {
-          leads.forEach(r => {
-            const candidate = r[idxCandidate] || '-';
-            const visaType = r[idxVisaType] || '-';
-            const visaStatus = r[idxVisaStatus] || '-';
-            const payment = r[idxPay] || 'Pending';
-            let estRevenue = 0;
-            if (visaStatus === 'Signed Up') {
-              estRevenue = revenuePerClient * revenueSharePercentage;
-              totalRevenue += estRevenue;
-            }
-            leadsTableBody.innerHTML += `
-              <tr>
-                <td class="px-6 py-4 text-sm text-gray-900">${candidate}</td>
-                <td class="px-6 py-4 text-sm text-gray-500">${visaType}</td>
-                <td class="px-6 py-4 text-sm text-gray-500">${visaStatus}</td>
-                <td class="px-6 py-4 text-sm text-gray-500">${payment}</td>
-                <td class="px-6 py-4 text-sm text-gray-500">${estRevenue ? estRevenue.toFixed(0)+' THB':'-'}</td>
-              </tr>`;
+          // Fetch referral data
+          const data = await fetchCSV(REFERRAL_CSV);
+          sheetLinks.innerHTML = "";
+
+          data.filter(row => row[0] === agencyName).forEach(row => {
+            const sheetName = row[1];
+            const sheetUrl = row[2];
+            const link = document.createElement("a");
+            link.href = sheetUrl;
+            link.target = "_blank";
+            link.className = "block p-4 bg-blue-100 rounded hover:bg-blue-200";
+            link.textContent = sheetName;
+            sheetLinks.appendChild(link);
           });
         } else {
-          noLeadsMessage.classList.remove('hidden');
+          errorMessage.textContent = "Invalid agency name or password.";
         }
-        totalRevenueSpan.textContent = totalRevenue.toFixed(0);
-      } catch {
-        errorMessage.textContent = "Could not load leads data.";
+      } catch (err) {
+        console.error(err);
+        errorMessage.textContent = "Error connecting to server.";
+      } finally {
+        loginButton.disabled = false;
+        loginButton.textContent = "Login";
       }
-    }
+    });
 
-    // On load
-    fetchAuthData().then(() => {
-      const stored = localStorage.getItem('loggedInAgency');
-      if (stored && authData[stored]) fetchData(stored);
+    logoutButton.addEventListener("click", () => {
+      dashboard.classList.add("hidden");
+      loginScreen.classList.remove("hidden");
+      loginForm.reset();
+      errorMessage.textContent = "";
     });
   </script>
 </body>
