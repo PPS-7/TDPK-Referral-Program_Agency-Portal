@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visa Referral Agency Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a202c; /* Dark background */
+            color: #f3f4f6; /* Light text for contrast */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        #login-screen, #dashboard-screen {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 28rem;
+        }
+        #dashboard-screen {
+            max-width: 64rem;
+        }
+        input {
+            transition: all 0.2s ease-in-out;
+            border-radius: 0.5rem;
+            border: 1px solid #d1d5db;
+            padding: 0.75rem;
+            background-color: #ffffff;
+            color: #000000 !important;
+        }
+        input::placeholder {
+            color: #000000 !important;
+            font-size: 1.125rem; /* Larger font for placeholder text only */
+        }
+        input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+            outline: none;
+            background-color: #ffffff;
+        }
+        button {
+            border-radius: 0.5rem;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        .btn-primary {
+            background-color: #3b82f6;
+            color: #ffffff;
+        }
+        .btn-primary:hover {
+            background-color: #2563eb;
+        }
+        .btn-logout {
+            background-color: #ef4444;
+            color: #ffffff;
+        }
+        .btn-logout:hover {
+            background-color: #dc2626;
+        }
+        .text-green-tdpk {
+            color: #52d242; /* Green from logo */
+        }
+        .text-red-tdpk {
+            color: #de353b; /* Red from logo */
+        }
+        .text-gray-700 {
+            color: #4a5568;
+        }
+        .text-gray-500 {
+            color: #a0aec0;
+        }
+        th, td {
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen" class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg">
+        <img src="https://placehold.co/400x150/52d242/ffffff?text=TDPK+International+Services" alt="TDPK International Services" class="mx-auto mb-6 rounded-xl shadow-md">
+
+        <h1 class="text-2xl font-bold mb-6 text-center text-gray-900">Referral Agency Portal</h1>
+        <form id="login-form" class="space-y-6">
+            <div>
+                <label for="agency-name" class="block text-sm font-medium text-gray-700">Agency Name</label>
+                <input type="text" id="agency-name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2" placeholder="Enter your agency name" required>
+            </div>
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <input type="password" id="password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="btn-primary w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Log In</button>
+            <div id="error-message" class="text-red-500 text-sm text-center"></div>
+        </form>
+    </div>
+
+    <div id="dashboard-screen" class="hidden max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold text-gray-900">Welcome, <span id="welcome-agency-name"></span></h1>
+            <button id="logout-button" class="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400">Log Out</button>
+        </div>
+        
+        <div class="bg-blue-50 border-l-4 border-blue-400 text-blue-800 p-4 rounded-lg mb-6">
+            <p class="text-base">Your total estimated revenue share for leads with a status of "Signed Up" is: <span id="total-revenue" class="font-bold"></span> THB.</p>
+        </div>
+        
+        <div id="leads-list">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-900">Your Referred Leads Status</h2>
+            <div id="leads-table-container" class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 rounded-lg">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tl-lg">Candidate Name</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Visa Type</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Visa Status</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Status</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tr-lg">Revenue Share (est.)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leads-table-body" class="bg-white divide-y divide-gray-200">
+                        <!-- Data will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <div id="no-leads" class="hidden text-center text-gray-500 mt-4 p-4 border rounded-md">
+                No referrals found for this agency.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // URL for the referral data sheet
+        const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSve5MYbZ7TUkDNHpYyWIHoi8mF32dFuEMmm2DCZTTd0o2gsWFRBG66ju9YKczVSrF1AxygZqvWwJ6K/pub?gid=1741255249&single=true&output=csv';
+        // URL for the new authentication sheet with Agency Names and Passwords
+        const sheetUrl_auth = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTfAgz53smE06zD57K1XB79aHtLn5UVSvTd0I_RQCnfl-HaEll4cJfaPYwhGGNqrxOrUdRrQ_TMrl-E/pub?gid=2106440009&single=true&output=csv'; 
+        
+        const revenueSharePercentage = 0.10; // 10% revenue share
+        const revenuePerClient = 50000; // Average revenue for a "Signed Up" client
+        let authData = {}; // This will store the fetched auth data
+
+        // --- CUSTOM COLUMN MAPPING ---
+        // Change these values to match the column headers in your Google Sheet
+        const columnMapping = {
+            agency: 'Agency Name',
+            candidate: 'Candidate Name',
+            visaType: 'Visa Type',
+            visaStatus: 'Visa Status',
+            paymentStatus: 'Payment Status',
+        };
+        //-----------------------------
+
+        const loginForm = document.getElementById('login-form');
+        const loginScreen = document.getElementById('login-screen');
+        const dashboardScreen = document.getElementById('dashboard-screen');
+        const welcomeAgencyName = document.getElementById('welcome-agency-name');
+        const totalRevenueSpan = document.getElementById('total-revenue');
+        const leadsTableBody = document.getElementById('leads-table-body');
+        const logoutButton = document.getElementById('logout-button');
+        const errorMessage = document.getElementById('error-message');
+        const noLeadsMessage = document.getElementById('no-leads');
+
+        // Robust CSV parsing function
+        function parseCSV(text) {
+            const rows = [];
+            let row = [];
+            let cell = '';
+            let inQuote = false;
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                const nextChar = text[i + 1];
+
+                if (char === '"') {
+                    if (inQuote && nextChar === '"') {
+                        cell += '"';
+                        i++;
+                    } else {
+                        inQuote = !inQuote;
+                    }
+                } else if (char === ',' && !inQuote) {
+                    row.push(cell);
+                    cell = '';
+                } else if (char === '\n' && !inQuote) {
+                    if (cell !== '') {
+                        row.push(cell);
+                        rows.push(row);
+                    }
+                    row = [];
+                    cell = '';
+                } else {
+                    cell += char;
+                }
+            }
+            if (cell !== '') {
+                row.push(cell);
+            }
+            if (row.length > 0) {
+                rows.push(row);
+            }
+            return rows.map(r => r.map(c => c.trim()));
+        }
+
+        async function fetchAuthData() {
+            try {
+                if (!sheetUrl_auth) {
+                    throw new Error("Authentication sheet URL is missing.");
+                }
+                const response = await fetch(sheetUrl_auth);
+                if (!response.ok) {
+                    throw new Error(`Failed to load authentication data. Status: ${response.status}. Please check your Google Sheet "Publish to web" settings.`);
+                }
+                const csvText = await response.text();
+                const rows = parseCSV(csvText);
+
+                if (rows.length < 2) {
+                    return; // No auth data
+                }
+
+                const headers = rows[0];
+                const agencyIndex = headers.indexOf('Agency Name');
+                const passwordIndex = headers.indexOf('Password');
+                
+                if (agencyIndex === -1 || passwordIndex === -1) {
+                    throw new Error("Authentication sheet must have 'Agency Name' and 'Password' columns.");
+                }
+
+                rows.slice(1).forEach(row => {
+                    const agencyName = row[agencyIndex].trim();
+                    const password = row[passwordIndex].trim();
+                    if (agencyName && password) {
+                        authData[agencyName] = password;
+                    }
+                });
+            } catch (error) {
+                console.error('Error fetching authentication data:', error);
+                errorMessage.textContent = `Login data error: ${error.message}`;
+            }
+        }
+        
+        loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            await fetchAuthData(); // Fetch auth data on every login attempt
+            const agencyName = document.getElementById('agency-name').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (authData[agencyName] && authData[agencyName] === password) {
+                // Successful login
+                localStorage.setItem('loggedInAgency', agencyName);
+                fetchData(agencyName);
+            } else {
+                errorMessage.textContent = 'Invalid agency name or password.';
+            }
+        });
+
+        logoutButton.addEventListener('click', function() {
+            localStorage.removeItem('loggedInAgency');
+            dashboardScreen.classList.add('hidden');
+            loginScreen.classList.remove('hidden');
+            leadsTableBody.innerHTML = '';
+            totalRevenueSpan.textContent = '';
+        });
+
+        async function fetchData(agencyName) {
+            try {
+                // Hide login, show dashboard
+                loginScreen.classList.add('hidden');
+                dashboardScreen.classList.remove('hidden');
+                welcomeAgencyName.textContent = agencyName;
+                leadsTableBody.innerHTML = '';
+                noLeadsMessage.classList.add('hidden');
+
+                const response = await fetch(sheetUrl);
+                if (!response.ok) {
+                    throw new Error(`Failed to load referral data. Status: ${response.status}. Please check your Google Sheet "Publish to web" settings.`);
+                }
+                const csvText = await response.text();
+                const rows = parseCSV(csvText);
+                
+                if (rows.length < 2) {
+                    noLeadsMessage.classList.remove('hidden');
+                    return;
+                }
+
+                const headers = rows[0];
+                const columnIndices = {};
+                for (const key in columnMapping) {
+                    columnIndices[key] = headers.indexOf(columnMapping[key]);
+                }
+
+                const requiredIndices = [columnIndices.agency, columnIndices.candidate, columnIndices.visaStatus, columnIndices.paymentStatus];
+                if (requiredIndices.some(index => index === -1)) {
+                    errorMessage.textContent = 'Required columns not found in sheet. Please check your sheet headers.';
+                    return;
+                }
+                
+                const filteredLeads = rows.slice(1).filter(row => row[columnIndices.agency].trim() === agencyName.trim());
+                
+                let totalRevenue = 0;
+                if (filteredLeads.length > 0) {
+                    filteredLeads.forEach(lead => {
+                        const candidateName = lead[columnIndices.candidate] || '-';
+                        const visaType = lead[columnIndices.visaType] || '-';
+                        const visaStatus = lead[columnIndices.visaStatus] || '-';
+                        const paymentStatus = lead[columnIndices.paymentStatus] || 'Pending';
+
+                        let estRevenue = 0;
+                        if (visaStatus.trim() === 'Signed Up') {
+                            estRevenue = revenuePerClient * revenueSharePercentage;
+                            totalRevenue += estRevenue;
+                        }
+
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${candidateName}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${visaType}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${visaStatus}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${paymentStatus}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${estRevenue > 0 ? estRevenue.toFixed(0) + ' THB' : '-'}</td>
+                        `;
+                        leadsTableBody.appendChild(row);
+                    });
+                } else {
+                    noLeadsMessage.classList.remove('hidden');
+                }
+
+                totalRevenueSpan.textContent = totalRevenue.toFixed(0);
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                errorMessage.textContent = `Data load error: ${error.message}`;
+            }
+        }
+
+        // Check for an existing session on page load
+        const storedAgency = localStorage.getItem('loggedInAgency');
+        if (storedAgency) {
+            // Re-fetch auth data for session check
+            fetchAuthData().then(() => {
+                if (authData[storedAgency]) {
+                    fetchData(storedAgency);
+                } else {
+                    // Stored session is invalid, clear it
+                    localStorage.removeItem('loggedInAgency');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
