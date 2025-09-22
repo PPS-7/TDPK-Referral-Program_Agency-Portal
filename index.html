@@ -3,361 +3,1020 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visa Referral Agency Portal</title>
+    <title>Visa Referral Agency Portal - TDPK International Services</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #3b82f6;
+            --primary-hover: #2563eb;
+            --success-color: #52d242;
+            --danger-color: #de353b;
+            --warning-color: #f59e0b;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --login-width: 28rem;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #1a202c; /* Dark background */
-            color: #f3f4f6; /* Light text for contrast */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--gray-800);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
         }
-        #login-screen, #dashboard-screen {
-            background-color: #ffffff;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            padding: 2.5rem;
+
+        .container {
             width: 100%;
-            max-width: 28rem;
+            max-width: var(--login-width);
+            margin: 1rem;
         }
-        #dashboard-screen {
-            max-width: 64rem;
+
+        .dashboard-container {
+            max-width: 80rem;
+            margin: 1rem;
         }
-        input {
-            transition: all 0.2s ease-in-out;
-            border-radius: 0.5rem;
-            border: 1px solid #d1d5db;
-            padding: 0.75rem;
-            background-color: #ffffff;
-            font-size: 0.875rem; /* Smaller font size for typed text */
-            color: #000000 !important;
+
+        .card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            padding: 1.5rem;
+            transition: all 0.3s ease;
         }
-        input::placeholder {
-            color: #a0aec0 !important; /* Lighter color */
-            font-size: 0.875rem; /* Smaller font size */
+
+        /* Match original login card padding */
+        #login-screen .card {
+            padding: 2.5rem;
         }
-        input:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
-            outline: none;
-            background-color: #ffffff;
-        }
-        button {
-            border-radius: 0.5rem;
-            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
-        }
-        button:hover {
+
+        .card:hover {
             transform: translateY(-2px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
+
+        .logo {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--gray-900);
+            background-color: white;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: var(--gray-400);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-height: 2.75rem;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .btn-primary {
-            background-color: #3b82f6;
-            color: #ffffff;
+            background-color: var(--primary-color);
+            color: white;
+            width: 100%;
         }
-        .btn-primary:hover {
-            background-color: #2563eb;
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
         }
-        .btn-logout {
-            background-color: #ef4444;
-            color: #ffffff;
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
         }
-        .btn-logout:hover {
-            background-color: #dc2626;
+
+        .btn-danger:hover {
+            background-color: #b91c1c;
+            transform: translateY(-1px);
         }
-        .text-green-tdpk {
-            color: #52d242; /* Green from logo */
+
+        .btn-secondary {
+            background-color: var(--gray-100);
+            color: var(--gray-700);
+            border: 1px solid var(--gray-300);
         }
-        .text-red-tdpk {
-            color: #de353b; /* Red from logo */
+
+        .btn-secondary:hover {
+            background-color: var(--gray-200);
         }
-        .text-gray-700 {
-            color: #4a5568;
+
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
         }
-        .text-gray-500 {
-            color: #a0aec0;
+
+        .alert-error {
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
         }
-        th, td {
-            background-color: #fff;
+
+        .alert-success {
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+        }
+
+        .alert-info {
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1e40af;
+        }
+
+        .alert-warning {
+            background-color: #fffbeb;
+            border: 1px solid #fed7aa;
+            color: #92400e;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 0.75rem;
+            border: 1px solid var(--gray-200);
+            margin-top: 1.5rem;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        .table th {
+            background-color: var(--gray-50);
+            padding: 1rem 1.5rem;
+            text-align: left;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .table td {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--gray-100);
+            font-size: 0.875rem;
+            color: var(--gray-700);
+        }
+
+        .table tbody tr:hover {
+            background-color: var(--gray-50);
+        }
+
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-signed-up {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .status-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-rejected {
+            background-color: #fee2e2;
+            color: #dc2626;
+        }
+
+        .status-processing {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .revenue-highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .revenue-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-top: 0.5rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--gray-500);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin: 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            border: 1px solid var(--gray-200);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .container, .dashboard-container {
+                margin: 0.5rem;
+            }
+            
+            .card {
+                padding: 1.25rem;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
-
-    <div id="login-screen" class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg">
-        <img src="https://placehold.co/400x150/52d242/ffffff?text=TDPK+International+Services" alt="TDPK International Services" class="mx-auto mb-6 rounded-xl shadow-md">
-
-        <h1 class="text-2xl font-bold mb-6 text-center text-gray-900">Referral Agency Portal</h1>
-        <form id="login-form" class="space-y-6">
-            <div>
-                <label for="agency-name" class="block text-sm font-medium text-gray-700">Agency Name</label>
-                <input type="text" id="agency-name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2" placeholder="Enter your agency name" required>
-            </div>
-            <div>
-                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                <input type="password" id="password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2" placeholder="Enter your password" required>
-            </div>
-            <button type="submit" id="login-button" class="btn-primary w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" disabled>Loading...</button>
-            <div id="error-message" class="text-red-500 text-sm text-center"></div>
-        </form>
+    <!-- Login Screen -->
+    <div id="login-screen" class="container">
+        <div class="card fade-in">
+            <img src="https://placehold.co/400x150/52d242/ffffff?text=TDPK+International+Services" 
+                 alt="TDPK International Services" 
+                 class="logo mx-auto">
+            
+            <h1 class="text-2xl font-bold mb-6 text-center text-gray-900">Agency Portal</h1>
+            <p class="text-center text-gray-600 mb-8">Access your referral program dashboard</p>
+            
+            <form id="login-form" class="space-y-6">
+                <div class="form-group">
+                    <label for="agency-name" class="form-label">Agency Name</label>
+                    <input type="text" 
+                           id="agency-name" 
+                           class="form-input" 
+                           placeholder="Enter your agency name" 
+                           required
+                           autocomplete="organization">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" 
+                           id="password" 
+                           class="form-input" 
+                           placeholder="Enter your password" 
+                           required
+                           autocomplete="current-password">
+                </div>
+                
+                <button type="submit" 
+                        id="login-button" 
+                        class="btn btn-primary" 
+                        disabled>
+                    <span class="loading-spinner"></span>
+                    Loading...
+                </button>
+                
+                <div id="error-message" class="alert alert-error hidden"></div>
+            </form>
+        </div>
     </div>
 
-    <div id="dashboard-screen" class="hidden max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-3xl font-bold text-gray-900">Welcome, <span id="welcome-agency-name"></span></h1>
-            <button id="logout-button" class="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400">Log Out</button>
-        </div>
-        
-        <div class="bg-blue-50 border-l-4 border-blue-400 text-blue-800 p-4 rounded-lg mb-6">
-            <p class="text-base">Your total estimated revenue share for leads with a status of "Signed Up" is: <span id="total-revenue" class="font-bold"></span> THB.</p>
-        </div>
-        
-        <div id="leads-list">
-            <h2 class="text-2xl font-semibold mb-4 text-gray-900">Your Referred Leads Status</h2>
-            <div id="leads-table-container" class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200 rounded-lg">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tl-lg">Candidate Name</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Visa Type</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Visa Status</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Status</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tr-lg">Revenue Share (est.)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="leads-table-body" class="bg-white divide-y divide-gray-200">
-                        <!-- Data will be inserted here by JavaScript -->
-                    </tbody>
-                </table>
+    <!-- Dashboard Screen -->
+    <div id="dashboard-screen" class="dashboard-container hidden">
+        <div class="card fade-in">
+            <div class="header">
+                <h1>Welcome, <span id="welcome-agency-name" class="text-blue-600"></span></h1>
+                <button id="logout-button" class="btn btn-danger">
+                    Log Out
+                </button>
             </div>
-            <div id="no-leads" class="hidden text-center text-gray-500 mt-4 p-4 border rounded-md">
-                No referrals found for this agency.
+            
+            <!-- Revenue Summary -->
+            <div class="revenue-highlight">
+                <p class="text-lg font-medium">Total Estimated Revenue Share</p>
+                <div class="revenue-amount" id="total-revenue">0 THB</div>
+                <p class="text-sm opacity-90 mt-2">For leads with "Signed Up" status</p>
+            </div>
+            
+            <!-- Statistics Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-leads">0</div>
+                    <div class="stat-label">Total Leads</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="signed-up-leads">0</div>
+                    <div class="stat-label">Signed Up</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="pending-leads">0</div>
+                    <div class="stat-label">Pending</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="rejected-leads">0</div>
+                    <div class="stat-label">Rejected</div>
+                </div>
+            </div>
+            
+            <!-- Leads Table -->
+            <div id="leads-section">
+                <h2 class="text-xl font-semibold mb-4 text-gray-900">Your Referred Leads</h2>
+                
+                <div id="leads-table-container" class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Candidate Name</th>
+                                <th>Visa Type</th>
+                                <th>Visa Status</th>
+                                <th>Payment Status</th>
+                                <th>Revenue Share (est.)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leads-table-body">
+                            <!-- Data will be inserted here by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="no-leads" class="empty-state hidden">
+                    <div class="empty-state-icon">📊</div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">No Referrals Found</h3>
+                    <p class="text-gray-500">No referrals found for this agency. Contact support if you believe this is an error.</p>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // === CONFIG: Use your provided CSV URLs exactly as requested ===
-        // Referral data sheet (leads)
-        const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSve5MYbZ7TUkDNHpYyWIHoi8mF32dFuEMmm2DCZTTd0o2gsWFRBG66ju9YKczVSrF1AxygZqvWwJ6K/pub?gid=1741255249&single=true&output=csv';
-        // Authentication sheet (agency + password)
-        const sheetUrl_auth = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTfAgz53smE06zD57K1XB79aHtLn5UVSvTd0I_RQCnfl-HaEll4cJfaPYwhGGNqrxOrUdRrQ_TMrl-E/pub?output=csv';
-        
-        // Revenue assumptions
-        const revenueSharePercentage = 0.10; // 10% revenue share
-        const revenuePerClient = 50000; // Average revenue for a "Signed Up" client (THB)
-        let authData = null; // Will store fetched auth data
-        
-        // --- CUSTOM COLUMN MAPPING ---
-        // Change these to match your Google Sheet headers
-        const columnMapping = {
-            agency: 'Agency Name',
-            candidate: 'Candidate Name',
-            visaType: 'Visa Type',
-            visaStatus: 'Visa Status',
-            paymentStatus: 'Payment Status',
+        // === CONFIGURATION ===
+        const CONFIG = {
+            // Google Sheets URLs
+            sheetUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSve5MYbZ7TUkDNHpYyWIHoi8mF32dFuEMmm2DCZTTd0o2gsWFRBG66ju9YKczVSrF1AxygZqvWwJ6K/pub?gid=1741255249&single=true&output=csv',
+            authSheetUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTfAgz53smE06zD57K1XB79aHtLn5UVSvTd0I_RQCnfl-HaEll4cJfaPYwhGGNqrxOrUdRrQ_TMrl-E/pub?gid=2106440009&single=true&output=csv',
+            
+            // Revenue settings
+            revenueSharePercentage: 0.10, // 10% revenue share
+            revenuePerClient: 50000, // Average revenue for a "Signed Up" client (THB)
+            
+            // Column mapping for data sheet
+            columnMapping: {
+                agency: 'Agency Name',
+                candidate: 'Candidate Name',
+                visaType: 'Visa Type',
+                visaStatus: 'Visa Status',
+                paymentStatus: 'Payment Status',
+            },
+            
+            // Security settings
+            maxLoginAttempts: 3,
+            sessionTimeout: 30 * 60 * 1000, // 30 minutes
         };
-        //-----------------------------
 
-        const loginForm = document.getElementById('login-form');
-        const loginScreen = document.getElementById('login-screen');
-        const dashboardScreen = document.getElementById('dashboard-screen');
-        const welcomeAgencyName = document.getElementById('welcome-agency-name');
-        const totalRevenueSpan = document.getElementById('total-revenue');
-        const leadsTableBody = document.getElementById('leads-table-body');
-        const logoutButton = document.getElementById('logout-button');
-        const errorMessage = document.getElementById('error-message');
-        const noLeadsMessage = document.getElementById('no-leads');
-        const loginButton = document.getElementById('login-button');
+        // === STATE MANAGEMENT ===
+        let state = {
+            authData: null,
+            currentAgency: null,
+            loginAttempts: 0,
+            sessionTimer: null,
+        };
 
-        // Robust CSV parser (handles quoted commas and escaped quotes)
+        // === DOM ELEMENTS ===
+        const elements = {
+            loginScreen: document.getElementById('login-screen'),
+            dashboardScreen: document.getElementById('dashboard-screen'),
+            loginForm: document.getElementById('login-form'),
+            agencyNameInput: document.getElementById('agency-name'),
+            passwordInput: document.getElementById('password'),
+            loginButton: document.getElementById('login-button'),
+            errorMessage: document.getElementById('error-message'),
+            welcomeAgencyName: document.getElementById('welcome-agency-name'),
+            totalRevenue: document.getElementById('total-revenue'),
+            totalLeads: document.getElementById('total-leads'),
+            signedUpLeads: document.getElementById('signed-up-leads'),
+            pendingLeads: document.getElementById('pending-leads'),
+            rejectedLeads: document.getElementById('rejected-leads'),
+            leadsTableBody: document.getElementById('leads-table-body'),
+            noLeadsMessage: document.getElementById('no-leads'),
+            logoutButton: document.getElementById('logout-button'),
+        };
+
+        // === UTILITY FUNCTIONS ===
+        function sanitizeInput(input) {
+            if (typeof input !== 'string') return '';
+            return input.trim().replace(/[<>]/g, '');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showError(message) {
+            elements.errorMessage.textContent = message;
+            elements.errorMessage.classList.remove('hidden');
+            elements.errorMessage.classList.add('alert-error');
+        }
+
+        function showSuccess(message) {
+            elements.errorMessage.textContent = message;
+            elements.errorMessage.classList.remove('hidden');
+            elements.errorMessage.classList.add('alert-success');
+        }
+
+        function hideMessage() {
+            elements.errorMessage.classList.add('hidden');
+            elements.errorMessage.className = 'alert hidden';
+        }
+
+        function setLoading(loading) {
+            elements.loginButton.disabled = loading;
+            if (loading) {
+                elements.loginButton.innerHTML = '<span class="loading-spinner"></span>Loading...';
+            } else {
+                elements.loginButton.textContent = 'Log In';
+            }
+        }
+
+        function startSession() {
+            if (state.sessionTimer) {
+                clearTimeout(state.sessionTimer);
+            }
+            state.sessionTimer = setTimeout(() => {
+                logout();
+                showError('Session expired. Please log in again.');
+            }, CONFIG.sessionTimeout);
+        }
+
+        function resetSession() {
+            if (state.sessionTimer) {
+                clearTimeout(state.sessionTimer);
+                state.sessionTimer = null;
+            }
+        }
+
+        // === CSV PARSING ===
         function parseCSV(text) {
+            if (!text || typeof text !== 'string') {
+                throw new Error('Invalid CSV data received');
+            }
+
             const rows = [];
-            let row = [];
-            let cell = '';
-            let inQuote = false;
-            for (let i = 0; i < text.length; i++) {
+            let currentRow = [];
+            let currentCell = '';
+            let inQuotes = false;
+            let i = 0;
+
+            while (i < text.length) {
                 const char = text[i];
                 const nextChar = text[i + 1];
 
                 if (char === '"') {
-                    if (inQuote && nextChar === '"') {
-                        cell += '"';
-                        i++;
+                    if (inQuotes && nextChar === '"') {
+                        currentCell += '"';
+                        i++; // Skip next quote
                     } else {
-                        inQuote = !inQuote;
+                        inQuotes = !inQuotes;
                     }
-                } else if (char === ',' && !inQuote) {
-                    row.push(cell);
-                    cell = '';
-                } else if (char === '\n' && !inQuote) {
-                    if (cell !== '') {
-                        row.push(cell);
-                        rows.push(row);
+                } else if (char === ',' && !inQuotes) {
+                    currentRow.push(currentCell.trim());
+                    currentCell = '';
+                } else if ((char === '\n' || char === '\r') && !inQuotes) {
+                    if (currentCell !== '') {
+                        currentRow.push(currentCell.trim());
                     }
-                    row = [];
-                    cell = '';
+                    if (currentRow.length > 0) {
+                        rows.push(currentRow);
+                    }
+                    currentRow = [];
+                    currentCell = '';
                 } else {
-                    cell += char;
+                    currentCell += char;
+                }
+                i++;
+            }
+
+            // Handle last cell and row
+            if (currentCell !== '') {
+                currentRow.push(currentCell.trim());
+            }
+            if (currentRow.length > 0) {
+                rows.push(currentRow);
+            }
+
+            return rows;
+        }
+
+        // === DATA FETCHING ===
+        async function fetchData(url, retries = 3) {
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'text/csv',
+                        },
+                        cache: 'no-cache',
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+
+                    const text = await response.text();
+                    if (!text || text.trim() === '') {
+                        throw new Error('Empty response received');
+                    }
+
+                    return text;
+                } catch (error) {
+                    console.warn(`Attempt ${i + 1} failed:`, error.message);
+                    if (i === retries - 1) {
+                        throw new Error(`Failed to fetch data after ${retries} attempts: ${error.message}`);
+                    }
+                    // Wait before retry
+                    await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
                 }
             }
-            if (cell !== '') {
-                row.push(cell);
-            }
-            if (row.length > 0) {
-                rows.push(row);
-            }
-            return rows.map(r => r.map(c => c.trim()));
         }
 
         async function fetchAuthData() {
             try {
-                loginButton.disabled = true;
-                loginButton.textContent = 'Loading...';
-                if (!sheetUrl_auth) {
-                    throw new Error("Authentication sheet URL is missing.");
-                }
-                const response = await fetch(sheetUrl_auth);
-                if (!response.ok) {
-                    throw new Error(\`Failed to load authentication data. Status: \${response.status}. Please check your Google Sheet "Publish to web" settings.\`);
-                }
-                const csvText = await response.text();
+                setLoading(true);
+                hideMessage();
+
+                const csvText = await fetchData(CONFIG.authSheetUrl);
                 const rows = parseCSV(csvText);
 
                 if (rows.length < 2) {
-                    authData = {};
-                    return;
+                    throw new Error('Authentication data is empty or invalid');
                 }
 
                 const headers = rows[0];
-                const agencyIndex = headers.indexOf('Agency Name');
-                const passwordIndex = headers.indexOf('Password');
-                
+                const agencyIndex = headers.findIndex(h => h.toLowerCase().includes('agency') && h.toLowerCase().includes('name'));
+                const passwordIndex = headers.findIndex(h => h.toLowerCase().includes('password'));
+
                 if (agencyIndex === -1 || passwordIndex === -1) {
-                    throw new Error("Authentication sheet must have 'Agency Name' and 'Password' columns.");
+                    throw new Error('Required columns (Agency Name, Password) not found in authentication sheet');
                 }
 
-                const tempAuthData = {};
-                rows.slice(1).forEach(row => {
-                    const agencyName = (row[agencyIndex] || '').trim();
-                    const password = (row[passwordIndex] || '').trim();
+                const authData = {};
+                rows.slice(1).forEach((row, index) => {
+                    const agencyName = sanitizeInput(row[agencyIndex]);
+                    const password = sanitizeInput(row[passwordIndex]);
+                    
                     if (agencyName && password) {
-                        tempAuthData[agencyName] = password;
+                        authData[agencyName] = password;
                     }
                 });
-                authData = tempAuthData;
+
+                if (Object.keys(authData).length === 0) {
+                    throw new Error('No valid authentication data found');
+                }
+
+                state.authData = authData;
+                console.log(`Loaded ${Object.keys(authData).length} agency credentials`);
+                
             } catch (error) {
                 console.error('Error fetching authentication data:', error);
-                errorMessage.textContent = \`Login data error: \${error.message}\`;
+                showError(`Authentication error: ${error.message}`);
+                throw error;
             } finally {
-                loginButton.disabled = false;
-                loginButton.textContent = 'Log In';
+                setLoading(false);
             }
         }
-        
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const agencyName = document.getElementById('agency-name').value.trim();
-            const password = document.getElementById('password').value.trim();
 
-            if (authData && authData[agencyName] && authData[agencyName] === password) {
-                // Successful login
-                localStorage.setItem('loggedInAgency', agencyName);
-                fetchData(agencyName);
-            } else {
-                errorMessage.textContent = 'Invalid agency name or password.';
+        // === AUTHENTICATION ===
+        function validateLogin(agencyName, password) {
+            if (!state.authData) {
+                throw new Error('Authentication data not loaded');
             }
-        });
 
-        logoutButton.addEventListener('click', function() {
-            localStorage.removeItem('loggedInAgency');
-            dashboardScreen.classList.add('hidden');
-            loginScreen.classList.remove('hidden');
-            leadsTableBody.innerHTML = '';
-            totalRevenueSpan.textContent = '';
-            errorMessage.textContent = '';
-        });
+            const sanitizedAgency = sanitizeInput(agencyName);
+            const sanitizedPassword = sanitizeInput(password);
 
-        async function fetchData(agencyName) {
-            try {
-                // Hide login, show dashboard
-                loginScreen.classList.add('hidden');
-                dashboardScreen.classList.remove('hidden');
-                welcomeAgencyName.textContent = agencyName;
-                leadsTableBody.innerHTML = '';
-                noLeadsMessage.classList.add('hidden');
+            if (!sanitizedAgency || !sanitizedPassword) {
+                throw new Error('Agency name and password are required');
+            }
 
-                const response = await fetch(sheetUrl);
-                if (!response.ok) {
-                    throw new Error(\`Failed to load referral data. Status: \${response.status}. Please check your Google Sheet "Publish to web" settings.\`);
+            if (state.authData[sanitizedAgency] !== sanitizedPassword) {
+                state.loginAttempts++;
+                throw new Error('Invalid agency name or password');
+            }
+
+            return sanitizedAgency;
+        }
+
+        // === DATA PROCESSING ===
+        function processLeadsData(rows, agencyName) {
+            if (rows.length < 2) {
+                return { leads: [], stats: { total: 0, signedUp: 0, pending: 0, rejected: 0, totalRevenue: 0 } };
+            }
+
+            const headers = rows[0];
+            const columnIndices = {};
+            
+            // Find column indices with flexible matching
+            for (const key in CONFIG.columnMapping) {
+                const targetColumn = CONFIG.columnMapping[key];
+                columnIndices[key] = headers.findIndex(h => 
+                    h.toLowerCase().includes(targetColumn.toLowerCase())
+                );
+            }
+
+            // Validate required columns
+            const requiredColumns = ['agency', 'candidate', 'visaStatus'];
+            const missingColumns = requiredColumns.filter(col => columnIndices[col] === -1);
+            
+            if (missingColumns.length > 0) {
+                throw new Error(`Missing required columns: ${missingColumns.join(', ')}`);
+            }
+
+            const leads = [];
+            const stats = { total: 0, signedUp: 0, pending: 0, rejected: 0, totalRevenue: 0 };
+
+            rows.slice(1).forEach((row, index) => {
+                const rowAgency = sanitizeInput(row[columnIndices.agency] || '');
+                
+                if (rowAgency.toLowerCase() === agencyName.toLowerCase()) {
+                    const lead = {
+                        candidate: sanitizeInput(row[columnIndices.candidate] || 'N/A'),
+                        visaType: sanitizeInput(row[columnIndices.visaType] || 'N/A'),
+                        visaStatus: sanitizeInput(row[columnIndices.visaStatus] || 'N/A'),
+                        paymentStatus: sanitizeInput(row[columnIndices.paymentStatus] || 'Pending'),
+                        estimatedRevenue: 0,
+                    };
+
+                    // Calculate revenue for signed up leads
+                    if (lead.visaStatus.toLowerCase() === 'signed up') {
+                        lead.estimatedRevenue = CONFIG.revenuePerClient * CONFIG.revenueSharePercentage;
+                        stats.totalRevenue += lead.estimatedRevenue;
+                        stats.signedUp++;
+                    } else if (lead.visaStatus.toLowerCase().includes('pending')) {
+                        stats.pending++;
+                    } else if (lead.visaStatus.toLowerCase().includes('reject')) {
+                        stats.rejected++;
+                    }
+
+                    leads.push(lead);
+                    stats.total++;
                 }
-                const csvText = await response.text();
+            });
+
+            return { leads, stats };
+        }
+
+        function getStatusBadgeClass(status) {
+            const statusLower = status.toLowerCase();
+            if (statusLower.includes('signed up') || statusLower.includes('approved')) {
+                return 'status-badge status-signed-up';
+            } else if (statusLower.includes('pending') || statusLower.includes('processing')) {
+                return 'status-badge status-pending';
+            } else if (statusLower.includes('reject') || statusLower.includes('denied')) {
+                return 'status-badge status-rejected';
+            } else {
+                return 'status-badge status-processing';
+            }
+        }
+
+        function renderLeadsTable(leads) {
+            elements.leadsTableBody.innerHTML = '';
+
+            if (leads.length === 0) {
+                elements.noLeadsMessage.classList.remove('hidden');
+                return;
+            }
+
+            elements.noLeadsMessage.classList.add('hidden');
+
+            leads.forEach(lead => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="font-medium text-gray-900">${escapeHtml(lead.candidate)}</td>
+                    <td class="text-gray-600">${escapeHtml(lead.visaType)}</td>
+                    <td>
+                        <span class="${getStatusBadgeClass(lead.visaStatus)}">
+                            ${escapeHtml(lead.visaStatus)}
+                        </span>
+                    </td>
+                    <td class="text-gray-600">${escapeHtml(lead.paymentStatus)}</td>
+                    <td class="text-gray-600 font-medium">
+                        ${lead.estimatedRevenue > 0 ? lead.estimatedRevenue.toFixed(0) + ' THB' : '-'}
+                    </td>
+                `;
+                elements.leadsTableBody.appendChild(row);
+            });
+        }
+
+        function updateDashboard(stats) {
+            elements.totalRevenue.textContent = stats.totalRevenue.toFixed(0) + ' THB';
+            elements.totalLeads.textContent = stats.total;
+            elements.signedUpLeads.textContent = stats.signedUp;
+            elements.pendingLeads.textContent = stats.pending;
+            elements.rejectedLeads.textContent = stats.rejected;
+        }
+
+        // === MAIN FUNCTIONS ===
+        async function login(agencyName, password) {
+            try {
+                hideMessage();
+                
+                if (state.loginAttempts >= CONFIG.maxLoginAttempts) {
+                    throw new Error('Too many failed login attempts. Please try again later.');
+                }
+
+                const validatedAgency = validateLogin(agencyName, password);
+                
+                // Reset login attempts on successful login
+                state.loginAttempts = 0;
+                state.currentAgency = validatedAgency;
+                
+                // Store in localStorage for session persistence
+                localStorage.setItem('loggedInAgency', validatedAgency);
+                
+                // Start session timer
+                startSession();
+                
+                // Load dashboard data
+                await loadDashboardData(validatedAgency);
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                showError(error.message);
+                throw error;
+            }
+        }
+
+        async function loadDashboardData(agencyName) {
+            try {
+                setLoading(true);
+                hideMessage();
+
+                // Show dashboard
+                elements.loginScreen.classList.add('hidden');
+                elements.dashboardScreen.classList.remove('hidden');
+                elements.welcomeAgencyName.textContent = agencyName;
+
+                // Fetch leads data
+                const csvText = await fetchData(CONFIG.sheetUrl);
                 const rows = parseCSV(csvText);
                 
-                if (rows.length < 2) {
-                    noLeadsMessage.classList.remove('hidden');
-                    return;
-                }
-
-                const headers = rows[0];
-                const columnIndices = {};
-                for (const key in columnMapping) {
-                    columnIndices[key] = headers.indexOf(columnMapping[key]);
-                }
-
-                const requiredIndices = [columnIndices.agency, columnIndices.candidate, columnIndices.visaStatus, columnIndices.paymentStatus];
-                if (requiredIndices.some(index => index === -1)) {
-                    errorMessage.textContent = 'Required columns not found in sheet. Please check your sheet headers.';
-                    return;
-                }
+                const { leads, stats } = processLeadsData(rows, agencyName);
                 
-                const filteredLeads = rows.slice(1).filter(row => (row[columnIndices.agency] || '').trim() === agencyName.trim());
+                // Update dashboard
+                updateDashboard(stats);
+                renderLeadsTable(leads);
                 
-                let totalRevenue = 0;
-                if (filteredLeads.length > 0) {
-                    filteredLeads.forEach(lead => {
-                        const candidateName = lead[columnIndices.candidate] || '-';
-                        const visaType = lead[columnIndices.visaType] || '-';
-                        const visaStatus = lead[columnIndices.visaStatus] || '-';
-                        const paymentStatus = lead[columnIndices.paymentStatus] || 'Pending';
-
-                        let estRevenue = 0;
-                        if ((visaStatus || '').trim() === 'Signed Up') {
-                            estRevenue = revenuePerClient * revenueSharePercentage;
-                            totalRevenue += estRevenue;
-                        }
-
-                        const row = document.createElement('tr');
-                        row.innerHTML = \`
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">\${String(candidateName)}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">\${String(visaType)}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">\${String(visaStatus)}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">\${String(paymentStatus)}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">\${estRevenue > 0 ? estRevenue.toFixed(0) + ' THB' : '-'}</td>
-                        \`;
-                        leadsTableBody.appendChild(row);
-                    });
-                } else {
-                    noLeadsMessage.classList.remove('hidden');
-                }
-
-                totalRevenueSpan.textContent = totalRevenue.toFixed(0);
-
+                console.log(`Loaded ${leads.length} leads for agency: ${agencyName}`);
+                
             } catch (error) {
-                console.error('Error fetching data:', error);
-                errorMessage.textContent = \`Data load error: \${error.message}\`;
+                console.error('Error loading dashboard data:', error);
+                showError(`Data loading error: ${error.message}`);
+                throw error;
+            } finally {
+                setLoading(false);
             }
         }
 
-        // Fetch authentication data on page load and support auto-login
-        fetchAuthData().then(() => {
-            const storedAgency = localStorage.getItem('loggedInAgency');
-            if (storedAgency && authData && authData[storedAgency]) {
-                fetchData(storedAgency);
-            } else {
-                localStorage.removeItem('loggedInAgency');
+        function logout() {
+            // Clear state
+            state.currentAgency = null;
+            state.loginAttempts = 0;
+            resetSession();
+            
+            // Clear localStorage
+            localStorage.removeItem('loggedInAgency');
+            
+            // Reset UI
+            elements.dashboardScreen.classList.add('hidden');
+            elements.loginScreen.classList.remove('hidden');
+            elements.leadsTableBody.innerHTML = '';
+            elements.agencyNameInput.value = '';
+            elements.passwordInput.value = '';
+            hideMessage();
+            
+            // Reset dashboard values
+            elements.totalRevenue.textContent = '0 THB';
+            elements.totalLeads.textContent = '0';
+            elements.signedUpLeads.textContent = '0';
+            elements.pendingLeads.textContent = '0';
+            elements.rejectedLeads.textContent = '0';
+        }
+
+        // === EVENT LISTENERS ===
+        elements.loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const agencyName = elements.agencyNameInput.value;
+            const password = elements.passwordInput.value;
+            
+            try {
+                await login(agencyName, password);
+            } catch (error) {
+                // Error already displayed by login function
             }
+        });
+
+        elements.logoutButton.addEventListener('click', logout);
+
+        // Input validation
+        elements.agencyNameInput.addEventListener('input', () => {
+            hideMessage();
+        });
+
+        elements.passwordInput.addEventListener('input', () => {
+            hideMessage();
+        });
+
+        // === INITIALIZATION ===
+        async function initialize() {
+            try {
+                // Load authentication data
+                await fetchAuthData();
+                
+                // Check for existing session
+                const storedAgency = localStorage.getItem('loggedInAgency');
+                if (storedAgency && state.authData && state.authData[storedAgency]) {
+                    state.currentAgency = storedAgency;
+                    startSession();
+                    await loadDashboardData(storedAgency);
+                }
+                
+            } catch (error) {
+                console.error('Initialization error:', error);
+                showError('Failed to initialize application. Please refresh the page.');
+            }
+        }
+
+        // Start the application
+        document.addEventListener('DOMContentLoaded', initialize);
+
+        // Handle page visibility changes to reset session timer
+        document.addEventListener('visibilitychange', () => {
+            if (state.currentAgency) {
+                if (document.hidden) {
+                    resetSession();
+                } else {
+                    startSession();
+                }
+            }
+        });
+
+        // Handle beforeunload to clean up
+        window.addEventListener('beforeunload', () => {
+            resetSession();
         });
     </script>
 </body>
