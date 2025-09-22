@@ -700,27 +700,53 @@
                 const csvText = await fetchData(CONFIG.authSheetUrl);
                 const rows = parseCSV(csvText);
 
-                if (rows.length < 2) {
-                    throw new Error('Authentication data is empty or invalid');
-                }
-
-                const headers = rows[0];
-                const agencyIndex = headers.findIndex(h => h.toLowerCase().includes('agency') && h.toLowerCase().includes('name'));
-                const passwordIndex = headers.findIndex(h => h.toLowerCase().includes('password'));
-
-                if (agencyIndex === -1 || passwordIndex === -1) {
-                    throw new Error('Required columns (Agency Name, Password) not found in authentication sheet');
-                }
-
                 const authData = {};
-                rows.slice(1).forEach((row, index) => {
-                    const agencyName = sanitizeInput(row[agencyIndex]);
-                    const password = sanitizeInput(row[passwordIndex]);
-                    
-                    if (agencyName && password) {
-                        authData[agencyName] = password;
+
+                // Primary: header-based two-column parsing
+                if (rows.length >= 2) {
+                    const headers = rows[0].map(h => (h || '').toLowerCase());
+                    const agencyIndex = headers.findIndex(h => h.includes('agency') && h.includes('name'));
+                    const passwordIndex = headers.findIndex(h => h.includes('password'));
+
+                    if (agencyIndex !== -1 && passwordIndex !== -1) {
+                        rows.slice(1).forEach(row => {
+                            const agencyName = sanitizeInput(row[agencyIndex] || '');
+                            const password = sanitizeInput(row[passwordIndex] || '');
+                            if (agencyName && password) {
+                                authData[agencyName] = password;
+                            }
+                        });
                     }
-                });
+                }
+
+                // Fallback A: two-column sheet without clear headers (skip obvious header words)
+                if (Object.keys(authData).length === 0 && rows.length >= 1 && rows[0].length >= 2) {
+                    rows.forEach((row, idx) => {
+                        const candidateAgency = sanitizeInput((row[0] || '').trim());
+                        const candidatePassword = sanitizeInput((row[1] || '').trim());
+                        const looksLikeHeader = candidateAgency.toLowerCase() === 'agency name' || candidatePassword.toLowerCase() === 'password';
+                        if (!looksLikeHeader && candidateAgency && candidatePassword) {
+                            authData[candidateAgency] = candidatePassword;
+                        }
+                    });
+                }
+
+                // Fallback B: single-row alternating cells [agency, password, agency, password, ...]
+                if (Object.keys(authData).length === 0 && rows.length === 1 && rows[0].length >= 2) {
+                    const flat = rows[0];
+                    for (let i = 0; i < flat.length - 1; i += 2) {
+                        const agencyName = sanitizeInput(flat[i] || '');
+                        const password = sanitizeInput(flat[i + 1] || '');
+                        const looksLikeHeader = agencyName.toLowerCase() === 'agency name' || password.toLowerCase() === 'password';
+                        if (!looksLikeHeader && agencyName && password) {
+                            authData[agencyName] = password;
+                        }
+                    }
+                }
+
+                if (Object.keys(authData).length === 0) {
+                    throw new Error('No valid authentication pairs found. Please check the sheet format.');
+                }
 
                 if (Object.keys(authData).length === 0) {
                     throw new Error('No valid authentication data found');
