@@ -446,7 +446,7 @@
             <div class="revenue-highlight">
                 <p class="text-lg font-medium">Total Estimated Revenue Share</p>
                 <div class="revenue-amount" id="total-revenue">0 THB</div>
-                <p class="text-sm opacity-90 mt-2">For leads with "Signed Up" status</p>
+                <p class="text-sm opacity-90 mt-2">For leads with "Approved Visa Candidate" status</p>
             </div>
             
             <!-- Statistics Grid -->
@@ -457,7 +457,7 @@
                 </div>
                 <div class="stat-card">
                     <div class="stat-number" id="signed-up-leads">0</div>
-                    <div class="stat-label">Signed Up</div>
+                    <div class="stat-label">Approved</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number" id="pending-leads">0</div>
@@ -508,7 +508,7 @@
             
             // Revenue settings
             revenueSharePercentage: 0.10, // 10% revenue share
-            revenuePerClient: 50000, // Average revenue for a "Signed Up" client (THB)
+            revenuePerClient: 50000, // Average revenue for a "Approved" client (THB)
             
             // Column mapping for data sheet
             columnMapping: {
@@ -825,8 +825,8 @@
                         estimatedRevenue: 0,
                     };
 
-                    // Calculate revenue for signed up leads
-                    if (lead.visaStatus.toLowerCase() === 'signed up') {
+                    // Calculate revenue for approved leads
+                    if (lead.visaStatus.toLowerCase() === 'approved') {
                         lead.estimatedRevenue = CONFIG.revenuePerClient * CONFIG.revenueSharePercentage;
                         stats.totalRevenue += lead.estimatedRevenue;
                         stats.signedUp++;
@@ -846,7 +846,7 @@
 
         function getStatusBadgeClass(status) {
             const statusLower = status.toLowerCase();
-            if (statusLower.includes('signed up') || statusLower.includes('approved')) {
+            if (statusLower.includes('approved') || statusLower.includes('approved')) {
                 return 'status-badge status-signed-up';
             } else if (statusLower.includes('pending') || statusLower.includes('processing')) {
                 return 'status-badge status-pending';
